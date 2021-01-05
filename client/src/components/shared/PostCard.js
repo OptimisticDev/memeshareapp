@@ -7,8 +7,9 @@ const PostCard = (props) => {
     <div className="post">
       <div className="card post__card">
         <h5>{postedBy?.name}</h5>
+        <h5>{image}</h5>
         <div className="card-image">
-          <img src={image} />
+          <img src={image} alt="post image" />
         </div>
         <div className="card-content post__content">
           {likes.includes(props.id) ? (
