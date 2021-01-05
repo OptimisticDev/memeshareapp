@@ -17,6 +17,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
+
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
@@ -30,8 +33,5 @@ if (process.env.NODE_ENV === "production") {
     next();
   });
 }
-
-app.use("/api/users", userRoutes);
-app.use("/api/posts", postRoutes);
 
 export default app;

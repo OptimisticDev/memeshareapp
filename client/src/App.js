@@ -34,7 +34,7 @@ const Routing = () => {
   }, []);
 
   return (
-    <>
+    <Switch>
       <Route exact path="/home">
         <Home />
       </Route>
@@ -53,7 +53,7 @@ const Routing = () => {
       <Route path="/reset/:token">
         <NewPassword />
       </Route>
-    </>
+    </Switch>
   );
 };
 
