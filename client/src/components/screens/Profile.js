@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../../App";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 
 import axios from "axios";
 import M from "materialize-css";
@@ -27,6 +28,7 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState(POST_ERROR_INITIAL_STATE);
   const [image, setImage] = useState("");
   const [posts, setPosts] = useState([]);
+  const [spinner, setSpinner] = useState(false);
 
   const postHandler = (e) => {
     e.preventDefault();
@@ -36,6 +38,7 @@ const Profile = () => {
   };
 
   const uploadPhoto = async () => {
+    setSpinner(true);
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "Memeverse");
@@ -45,11 +48,13 @@ const Profile = () => {
       const res = await axios.post(CLOUDNARY_API_URL, data);
       if (res) {
         const { data } = res;
-        setPost({ ...post, image: data.url });
+        setImage("");
+        setPost({ ...post, image: data.secure_url });
       }
     } else {
       setErrorMsg({ ...errorMsg, image: "You haven't attach photo yet!" });
     }
+    setSpinner(false);
   };
 
   const postDetails = async () => {
@@ -66,7 +71,7 @@ const Profile = () => {
         if (success) {
           M.toast({ html: message, classes: "success" });
           setPost({ ...POST_INITIAL_STATE });
-          history.push("/home");
+          history.push("/");
         } else {
           M.toast({ html: errors.invalidUser, classes: "error" });
           setErrorMsg({ ...errors });
@@ -142,29 +147,41 @@ const Profile = () => {
             </div>
           </div>
           {errorMsg.image && <Error error={errorMsg.image} />}
-          <button
-            className={
-              post.image
-                ? "waves-effect waves-light green lighten-2 btn"
-                : "waves-effect waves-light red lighten-2 btn"
-            }
-            style={{ marginRight: "10px" }}
-            onClick={uploadPhoto}
-          >
-            Upload Photo
-          </button>
-          <button
-            className="waves-effect waves-light red lighten-2 btn"
-            onClick={postDetails}
-          >
-            Share Post
-          </button>
+          {image && !spinner && (
+            <button
+              className={
+                post.image
+                  ? "waves-effect waves-light green lighten-2 btn"
+                  : "waves-effect waves-light red lighten-2 btn"
+              }
+              onClick={uploadPhoto}
+            >
+              Upload Photo
+            </button>
+          )}
+          {spinner && (
+            <Row>
+              <Col>
+                <Spinner animation="border" variant="primary" />
+              </Col>
+            </Row>
+          )}
+          {post.image && (
+            <button
+              className="waves-effect waves-light red lighten-2 btn"
+              onClick={postDetails}
+            >
+              Share Post
+            </button>
+          )}
         </div>
       </div>
-      <div className="gallary-container">
-        {posts.length > 0 &&
-          posts.map((post, i) => <UserPostCard key={i} image={post.image} />)}
-      </div>
+      <Container>
+        <Row>
+          {posts.length > 0 &&
+            posts.map((post, i) => <UserPostCard key={i} image={post.image} />)}
+        </Row>
+      </Container>
     </div>
   );
 };

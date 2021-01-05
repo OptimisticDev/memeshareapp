@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Row, Col, Spinner } from "react-bootstrap";
 
 import axios from "axios";
 import M from "materialize-css";
@@ -17,6 +18,7 @@ const Signup = () => {
 
   const [signUpuser, setSignUpUser] = useState(SIGNUP_USER_INITIAL_STATE);
   const [errorMsg, setErrorMsg] = useState(SIGNUP_USER_ERROR_INITIAL_STATE);
+  const [spinner, setSpinner] = useState(false);
 
   const signUpUserHandler = (e) => {
     e.preventDefault();
@@ -36,6 +38,7 @@ const Signup = () => {
   };
 
   const signUpSubmitHandler = async () => {
+    setSpinner(true);
     const { data } = await axios.post(USER_SIGNUP_POST_URL, signUpuser);
 
     if (data) {
@@ -49,6 +52,7 @@ const Signup = () => {
         setErrorMsg({ ...errors });
       }
     }
+    setSpinner(false);
   };
 
   return (
@@ -81,12 +85,20 @@ const Signup = () => {
         {errorMsg.password && <Error error={errorMsg.password} />}
         {errorMsg.userExists && <Error error={errorMsg.userExists} />}
         {/* {successMsg.message && <Success message={successMsg.message} />} */}
-        <button
-          className="waves-effect waves-light red lighten-2 btn"
-          onClick={signUpSubmitHandler}
-        >
-          SignUp
-        </button>
+        {spinner ? (
+          <Row>
+            <Col>
+              <Spinner animation="border" variant="primary" />
+            </Col>
+          </Row>
+        ) : (
+          <button
+            className="waves-effect waves-light red lighten-2 btn"
+            onClick={signUpSubmitHandler}
+          >
+            SignUp
+          </button>
+        )}
         <h5>
           <Link to="/signin">Already have an account ?</Link>
         </h5>

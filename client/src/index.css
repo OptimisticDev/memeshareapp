@@ -1,11 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap");
 
-.brand-logo {
+.brand-logo,
+.logo {
   font-family: "Grand Hotel", cursive;
 }
 .nav-wrapper {
   padding-left: 10px;
   padding-right: 10px;
+}
+.navbar-brand {
+  font-weight: 500;
+  text-transform: none;
+  font-size: 25px;
 }
 
 .mycard {
@@ -52,6 +58,17 @@ textarea.materialize-textarea.valid:focus,
 }
 h5 a {
   color: #e57373;
+}
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
+a:hover {
+  color: #423e3e !important;
+  text-decoration: none !important;
+}
+.forget__password {
+  color: "crimson" !important;
 }
 .profile {
   text-align: center;
@@ -140,4 +157,9 @@ h5 a {
   font-size: 20px;
   font-weight: bold;
   margin: 0px 20px;
+}
+.img-fluid {
+  height: 200px !important;
+  object-fit: cover !important;
+  margin-top: 15px;
 }

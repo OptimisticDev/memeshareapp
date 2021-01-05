@@ -15,6 +15,8 @@ import { authorizedHeaderHelper } from "../../helpers/authorizedHeaderHelper";
 const Home = () => {
   const { state, dispatch } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
+  const [spinner, setSpinner] = useState(false);
+  const [spinnerGrow, setSpinnerGrow] = useState(false);
   useEffect(() => {
     const headers = authorizedHeaderHelper();
 
@@ -33,6 +35,7 @@ const Home = () => {
   }, []);
 
   const likeUnlikePostHandler = async (id, key) => {
+    setSpinnerGrow(true);
     const headers = authorizedHeaderHelper();
 
     const postId = { postId: id };
@@ -49,9 +52,11 @@ const Home = () => {
       setPosts([]);
       setPosts(updateData);
     }
+    setSpinnerGrow(false);
   };
 
   const commentHandler = async (text, postId, key) => {
+    setSpinner(true);
     const headers = authorizedHeaderHelper();
 
     const newComment = { postId, text };
@@ -61,7 +66,6 @@ const Home = () => {
       });
       if (res) {
         const { data } = res;
-        console.log(data);
         const updateData = posts;
         updateData[key].comments = data.comments;
 
@@ -69,6 +73,7 @@ const Home = () => {
         setPosts(updateData);
       }
     }
+    setSpinner(false);
   };
 
   return (
@@ -81,6 +86,8 @@ const Home = () => {
         data={post}
         likeUnlikePost={likeUnlikePostHandler}
         commentPost={commentHandler}
+        loading={spinner}
+        loadingGrow={spinnerGrow}
       />
     ))
   );

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../../App";
+import { Row, Col, Spinner } from "react-bootstrap";
 
 import axios from "axios";
 import M from "materialize-css";
@@ -23,6 +24,7 @@ const Signin = () => {
 
   const [signInUser, setSignInUser] = useState(SIGNIN_USER_INITIAL_STATE);
   const [errorMsg, setErrorMsg] = useState(SIGNIN_USER_ERROR_INITIAL_STATE);
+  const [spinner, setSpinner] = useState(false);
 
   const signInUserHandler = (e) => {
     e.preventDefault();
@@ -41,6 +43,7 @@ const Signin = () => {
   };
 
   const signInSubmitHandler = async () => {
+    setSpinner(true);
     const { data } = await axios.post(USER_SIGNIN_POST_URL, signInUser);
 
     if (data) {
@@ -54,11 +57,12 @@ const Signin = () => {
         M.toast({ html: message, classes: "success" });
 
         setSignInUser({ ...SIGNIN_USER_INITIAL_STATE });
-        history.push("/home");
+        history.push("/");
       } else {
         setErrorMsg({ ...errors });
       }
     }
+    setSpinner(false);
   };
 
   return (
@@ -82,18 +86,28 @@ const Signin = () => {
         />
         {errorMsg.password && <Error error={errorMsg.password} />}
         {errorMsg.invalidUser && <Error error={errorMsg.invalidUser} />}
-        <button
-          className="waves-effect waves-light red lighten-2 btn"
-          onClick={signInSubmitHandler}
-        >
-          SignIn
-        </button>
+        {spinner ? (
+          <Row>
+            <Col>
+              <Spinner animation="border" variant="primary" />
+            </Col>
+          </Row>
+        ) : (
+          <button
+            className="waves-effect waves-light red lighten-2 btn"
+            onClick={signInSubmitHandler}
+          >
+            SignIn
+          </button>
+        )}
         <h5>
           <Link to="/signup">Don't have an account ?</Link>
         </h5>
-        <p>
-          <Link to="/reset">Forget password ?</Link>
-        </p>
+        <h6>
+          <Link to="/reset" style={{ color: "blue" }}>
+            Forget password ?
+          </Link>
+        </h6>
       </div>
     </div>
   );

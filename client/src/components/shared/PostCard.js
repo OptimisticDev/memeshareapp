@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
 
 const PostCard = (props) => {
   const [comment, setComment] = useState("");
@@ -7,11 +8,9 @@ const PostCard = (props) => {
     <div className="post">
       <div className="card post__card">
         <h5>{postedBy?.name}</h5>
-        <h5>
-          <a href={image}>{image}</a>
-        </h5>
+
         <div className="card-image">
-          <img src={image} alt="post image" />
+          <img src={image} alt="post image" alt="image" />
         </div>
         <div className="card-content post__content">
           {likes.includes(props.id) ? (
@@ -31,7 +30,9 @@ const PostCard = (props) => {
               thumb_up
             </i>
           )}
-
+          {props.loadingGrow && (
+            <Spinner animation="grow" variant="primary" size="md" />
+          )}
           <h6>
             {likes.length <= 1
               ? `${likes.length} like`
@@ -46,12 +47,17 @@ const PostCard = (props) => {
               onChange={(e) => setComment(e.target.value)}
             />
           </div>
-          <button
-            className="waves-effect waves-light red lighten-2 btn"
-            onClick={(e) => props.commentPost(comment, _id, props.index)}
-          >
-            Comment
-          </button>
+
+          {props.loading ? (
+            <Spinner animation="border" variant="primary" />
+          ) : (
+            <button
+              className="waves-effect waves-light red lighten-2 btn"
+              onClick={(e) => props.commentPost(comment, _id, props.index)}
+            >
+              Comment
+            </button>
+          )}
           {comments.length > 0 &&
             comments.map((comment, i) => (
               <div className="comment card" key={i}>
