@@ -53,7 +53,11 @@ const NewPassword = () => {
         {errorMsg && <Error error={errorMsg.password} />}
 
         {spinner ? (
-          <Spinner animation="border" variant="primary" />
+          <Row>
+            <Col>
+              <Spinner animation="border" variant="primary" />
+            </Col>
+          </Row>
         ) : (
           <button
             className="waves-effect waves-light red lighten-2 btn"
