@@ -7,7 +7,9 @@ const PostCard = (props) => {
     <div className="post">
       <div className="card post__card">
         <h5>{postedBy?.name}</h5>
-        <h5>{image}</h5>
+        <h5>
+          <a href={image}>{image}</a>
+        </h5>
         <div className="card-image">
           <img src={image} alt="post image" />
         </div>
